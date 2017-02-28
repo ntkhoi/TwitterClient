@@ -22,6 +22,7 @@ class TweetsViewController: UIViewController {
         
         
         TwitterClient.shareInstance?.homeTimeline(success: { (tweets:[Tweet]) in
+            self.tweets.removeAll()
             self.tweets.append(contentsOf: tweets)
             self.tableview.reloadData()
             for tweet in tweets{
@@ -36,6 +37,18 @@ class TweetsViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let vc =  segue.destination as? TweetDetailViewController
+        if let vc = vc{
+            vc.tweetid = sender as! String
+            print("vc.tweetid \(vc.tweetid)")
+        }else{
+            let vc = segue.destination as! NewTweetViewController
+            vc.delegate = self
+        }
     }
     
     private func setupTableView(){
@@ -64,10 +77,18 @@ extension TweetsViewController: UITableViewDelegate , UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "tweetdetailSegue", sender: nil)
+        self.performSegue(withIdentifier: "tweetdetailSegue", sender: tweets[indexPath.row].id)
     }
     
     
+}
+
+extension TweetsViewController: NewTweetViewControllerDelegate {
+    
+    func newTweetViewController(newTweetViewController: NewTweetViewController, onTweetClick tweet: Tweet) {
+        self.tweets.insert(tweet, at: 0)
+        self.tableview.reloadData()
+    }
 }
 
 

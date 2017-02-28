@@ -9,6 +9,8 @@
 import UIKit
 
 class Tweet {
+    
+    var id: String?
     var text: String?
     var timestamp: Date?
     var retweetCount: Int?
@@ -16,6 +18,9 @@ class Tweet {
     var user: User?
 
     init(dictionary: NSDictionary) {
+        
+        self.id = dictionary["id_str"] as? String
+        
         self.text = dictionary["text"] as? String
         
         retweetCount = dictionary["retweet_count"] as? Int ?? 0

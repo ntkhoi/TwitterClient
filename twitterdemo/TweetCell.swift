@@ -27,16 +27,16 @@ class TweetCell: UITableViewCell {
                 userprofileImage.setImageWith(url)
             }
             
-            let date = NSDate()
-            let calendar = NSCalendar.current
+            
+            let calendar = Calendar.current
             if let timestamp = tweet.timestamp{
                 let hour = calendar.component(.hour, from: timestamp as Date)
-                if hour >= 1{
-                    createdtimeLabel.text = "\(hour)h"
+                let currenthour = calendar.component(.hour, from: Date())
+                if (currenthour -  hour) >= 1{
+                    createdtimeLabel.text = "\((currenthour - hour))h"
                 }else{
-                    let minutes = calendar.component(.minute, from: date as Date)
-                    
-                    createdtimeLabel.text = "\( minutes)mins"
+                    let minutes = calendar.component(.minute, from: Date())
+                    createdtimeLabel.text = "\(minutes))mins"
                 }
             }
             
