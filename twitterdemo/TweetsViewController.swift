@@ -14,24 +14,56 @@ class TweetsViewController: UIViewController {
    
 
     var tweets = [Tweet]()
+    let refreshControl  = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        refreshControl.addTarget(self, action: #selector(self.fetchData), for: UIControlEvents.valueChanged)
+        self.tableview.insertSubview(refreshControl, at: 0)
         setupTableView()
+        fetchData()
         
         
-        
+    }
+    
+    func fetchData(){
+        refreshControl.beginRefreshing()
         TwitterClient.shareInstance?.homeTimeline(success: { (tweets:[Tweet]) in
             self.tweets.removeAll()
             self.tweets.append(contentsOf: tweets)
             self.tableview.reloadData()
-            for tweet in tweets{
-                print(tweet.text!)
-            }
+            self.refreshControl.endRefreshing()
         }, failure: { (error:Error?) in
             print("Request api error: \(error?.localizedDescription)")
-        })
-        
+            self.refreshControl.endRefreshing()
+        }, count: 20)
+    }
+    
+    var isMoreDataLoading = false
+    var currentPageCount:Int = 20
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !isMoreDataLoading{
+            
+            let scrollViewContentHeight = self.tableview.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - self.tableview.bounds.size.height
+            
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && self.tableview.isDragging) {
+                isMoreDataLoading = true
+                currentPageCount += 20
+                refreshControl.beginRefreshing()
+                TwitterClient.shareInstance?.homeTimeline(success: { (tweets:[Tweet]) in
+                    self.tweets.removeAll()
+                    self.tweets.append(contentsOf: tweets)
+                    self.tableview.reloadData()
+                    self.refreshControl.endRefreshing()
+                    self.isMoreDataLoading = false
+                    self.refreshControl.endRefreshing()
+                }, failure: { (error:Error?) in
+                    self.refreshControl.endRefreshing()
+                }, count: currentPageCount)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,12 +115,14 @@ extension TweetsViewController: UITableViewDelegate , UITableViewDataSource{
     
 }
 
-extension TweetsViewController: NewTweetViewControllerDelegate {
+extension TweetsViewController: NewTweetViewControllerDelegate ,UIScrollViewDelegate{
     
     func newTweetViewController(newTweetViewController: NewTweetViewController, onTweetClick tweet: Tweet) {
         self.tweets.insert(tweet, at: 0)
         self.tableview.reloadData()
     }
+    
+   
 }
 
 

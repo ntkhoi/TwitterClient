@@ -20,29 +20,29 @@ class TweetCell: UITableViewCell {
     var tweet:Tweet!{
         didSet{
             usernameLabel.text = tweet.user?.name
-            userscreenNameLabel.text =  "@\(tweet.user?.screenName)"
-            createdtimeLabel.text = "4h"
+            userscreenNameLabel.text =  "@\(tweet.user!.screenName!)"
+            createdtimeLabel.text = ""
             tweetcontentLabel.text = tweet.text
             if let url = tweet.user?.profileUrl{
                 userprofileImage.setImageWith(url)
             }
             
             
-            let calendar = Calendar.current
+            
             if let timestamp = tweet.timestamp{
-                let hour = calendar.component(.hour, from: timestamp as Date)
-                let currenthour = calendar.component(.hour, from: Date())
-                if (currenthour -  hour) >= 1{
-                    createdtimeLabel.text = "\((currenthour - hour))h"
-                }else{
-                    let minutes = calendar.component(.minute, from: Date())
-                    createdtimeLabel.text = "\(minutes))mins"
+                let elapsedTime = Date().timeIntervalSince(timestamp)
+                if elapsedTime < 60{
+                    createdtimeLabel.text =  String(Int(elapsedTime)) + "seconds"
+
+                }else if elapsedTime < 3600 {
+                        createdtimeLabel.text = String(Int(elapsedTime / 60)) + "Mins"
+                }else if elapsedTime < 24*3600 {
+                        createdtimeLabel.text = String(Int(elapsedTime / 60 / 60)) + "Hour"
+                    
                 }
             }
-            
         }
     }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
