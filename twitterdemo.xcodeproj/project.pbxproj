@@ -176,7 +176,7 @@
 				TargetAttributes = {
 					20AB547E1E63C7F1000B6756 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 2C962LGLQ2;
+						DevelopmentTeam = 87E55Q9ME9;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -397,8 +397,9 @@
 			baseConfigurationReference = 406017CBACF0B121E8482D16 /* Pods-twitterdemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2C962LGLQ2;
+				DEVELOPMENT_TEAM = 87E55Q9ME9;
 				INFOPLIST_FILE = twitterdemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khoint.Instagram.twitterdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -411,8 +412,9 @@
 			baseConfigurationReference = 6657C72E89A2D9A2C96EC9D6 /* Pods-twitterdemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 2C962LGLQ2;
+				DEVELOPMENT_TEAM = 87E55Q9ME9;
 				INFOPLIST_FILE = twitterdemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khoint.Instagram.twitterdemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

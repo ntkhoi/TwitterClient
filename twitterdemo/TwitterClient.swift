@@ -10,7 +10,7 @@ import UIKit
 import BDBOAuth1Manager
 
 class TwitterClient: BDBOAuth1SessionManager {
-    static let shareInstance = TwitterClient(baseURL: URL(string:"https://api.twitter.com"), consumerKey: "yllhZ2fmytsEI0xaZ3Hlq6OZQ", consumerSecret: "fzVwZmTlvPVMfxuhECyyNilrogxLZqilUaCwxC8HVjegdhMwbV")
+    static let shareInstance = TwitterClient(baseURL: URL(string:"https://api.twitter.com"), consumerKey: "q9090RuzPCnf0JJRjH9M0W1pq", consumerSecret: "cbCdUGAOGhEtvsnUEc1wlOeNtD3g3b6Ofo3hRgVkfJHv0QruNc")
     
     
     
@@ -28,7 +28,11 @@ class TwitterClient: BDBOAuth1SessionManager {
             let url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken!.token!)")
             
             print( "Request Token : \(requestToken!.token)")
-            UIApplication.shared.open(url!, options: ["": AnyObject.self ], completionHandler: nil)
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url!, options: ["": AnyObject.self ], completionHandler: nil)
+            } else {
+                // Fallback on earlier versions
+            }
             
         }, failure: { (error: Error?) in
             print("i got error : \(error?.localizedDescription)")

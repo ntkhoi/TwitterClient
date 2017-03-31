@@ -12,7 +12,13 @@ class TweetsViewController: UIViewController {
     
     @IBOutlet weak var tableview: UITableView!
    
+    @IBOutlet weak var leftLeadingContentView: NSLayoutConstraint!
+    @IBOutlet weak var menuView: UIView!
 
+    @IBOutlet weak var contentView: UIView!
+    var orginLeftMargin : CGFloat!
+    
+    
     var tweets = [Tweet]()
     let refreshControl  = UIRefreshControl()
     
@@ -26,6 +32,7 @@ class TweetsViewController: UIViewController {
         
     }
     
+   
     func fetchData(){
         refreshControl.beginRefreshing()
         TwitterClient.shareInstance?.homeTimeline(success: { (tweets:[Tweet]) in
@@ -125,6 +132,46 @@ extension TweetsViewController: NewTweetViewControllerDelegate ,UIScrollViewDele
    
 }
 
+
+extension TweetsViewController {
+
+    @IBAction func panGestureRecognizer(_ sender: UIPanGestureRecognizer) {
+        
+        let translation = sender.translation(in: view)
+        let velocity = sender.velocity(in: view)
+        
+        switch sender.state {
+        case .began:
+            orginLeftMargin = leftLeadingContentView.constant
+            break
+        case .changed :
+            leftLeadingContentView.constant = orginLeftMargin + translation.x
+        break
+        
+        case .ended:
+            UIView.animate(withDuration: 0.3, animations:{
+                if velocity.x > 0 {
+                    
+                    if(self.leftLeadingContentView.constant > self.menuView.frame.width/2){
+                        self.leftLeadingContentView.constant = self.menuView.frame.width
+                    }else{
+                        self.leftLeadingContentView.constant = 0
+                    }
+                    
+                }else{
+                    self.leftLeadingContentView.constant = 0
+                }
+                self.view.layoutIfNeeded()
+            })
+        break
+            
+        default:
+            break
+            
+        }
+        
+    }
+}
 
 
 
